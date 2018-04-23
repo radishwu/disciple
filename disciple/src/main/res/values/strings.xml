@@ -1,0 +1,4 @@
+<resources>
+    <string name="disciple_http_request_failure">服务器请求失败，请稍后尝试。</string>
+    <string name="disciple_http_bad_net">网络异常，请稍后尝试。</string>
+</resources>
