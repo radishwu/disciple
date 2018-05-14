@@ -6,7 +6,9 @@ import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.monster.disciple.interceptor.HttpCacheInterceptor;
 import com.monster.disciple.interceptor.MultiHostInterceptor;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -37,16 +39,22 @@ public final class Disciple {
     public static void init(Context context, Builder builder) {
         instance = new Disciple();
 
-        clientInstance = new OkHttpClient.Builder()
+        OkHttpClient.Builder okHttpBuilder = new OkHttpClient.Builder()
                 .addInterceptor(new MultiHostInterceptor())
                 .addInterceptor(new HttpCacheInterceptor(context.getApplicationContext(), builder.cacheInvalidSec))
                 .cache(HttpCacheInterceptor.getCache(context.getApplicationContext(), builder.cacheSize))
                 .addInterceptor(builder.isDebug ? new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY) : new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.NONE))
-                .addInterceptor(builder.loginInterceptor)
                 .addNetworkInterceptor(new StethoInterceptor())
                 .connectTimeout(builder.timeout, TimeUnit.SECONDS)
-                .writeTimeout(builder.timeout, TimeUnit.SECONDS)
-                .build();
+                .writeTimeout(builder.timeout, TimeUnit.SECONDS);
+
+        if (null != builder.interceptors && 0 < builder.interceptors.size()) {
+            for (Interceptor interceptor : builder.interceptors) {
+                okHttpBuilder.addInterceptor(interceptor);
+            }
+        }
+
+        clientInstance = okHttpBuilder.build();
 
         instance.setBaseUrl(builder.baseUrl);
     }
@@ -101,7 +109,7 @@ public final class Disciple {
 
         long timeout;
 
-        Interceptor loginInterceptor;
+        List<Interceptor> interceptors;
 
         boolean isDebug;
 
@@ -125,8 +133,11 @@ public final class Disciple {
             return this;
         }
 
-        public Builder loginInterceptor(Interceptor loginInterceptor) {
-            this.loginInterceptor = loginInterceptor;
+        public Builder addInterceptor(Interceptor interceptor) {
+            if (null == interceptors) {
+                interceptors = new ArrayList<>();
+            }
+            interceptors.add(interceptor);
             return this;
         }
 
