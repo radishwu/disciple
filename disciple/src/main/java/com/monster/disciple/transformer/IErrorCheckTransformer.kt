@@ -1,6 +1,6 @@
-package com.monster.disciple.transformer;
+package com.monster.disciple.transformer
 
-public interface IErrorCheckTransformer {
+interface IErrorCheckTransformer {
 
     /**
      * 登录态是否失效
@@ -9,12 +9,12 @@ public interface IErrorCheckTransformer {
      * @param msg  response msg
      * @return true 失效；false 未失效
      */
-    boolean isLoginInvalid(Integer code, String msg);
+    fun isLoginInvalid(code: Int?, msg: String?): Boolean
 
     /**
      * 登录态失效逻辑
      */
-    void loginInvalid();
+    fun loginInvalid()
 
     /**
      * 是否错误的返回
@@ -23,5 +23,5 @@ public interface IErrorCheckTransformer {
      * @param msg  response msg
      * @return true 错误response；正确response
      */
-    boolean isErrorResponse(Integer code, String msg);
+    fun isErrorResponse(code: Int?, msg: String?): Boolean
 }
