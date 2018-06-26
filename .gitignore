@@ -11,3 +11,5 @@
 /build
 /captures
 .externalNativeBuild
+disciple/bintrayUpload.gradle
+disciple/project.properties
