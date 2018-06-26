@@ -3,6 +3,7 @@ package com.monster.disciple
 import android.content.Context
 import com.monster.disciple.response.BaseResponse
 import com.monster.disciple.transformer.AbsErrorCheckTransformer
+import com.monster.disciple.util.CacheBuilder
 import retrofit2.Response
 
 class DefaultTransformer<T : Response<R>, R : BaseResponse<*>> : AbsErrorCheckTransformer<T, R> {

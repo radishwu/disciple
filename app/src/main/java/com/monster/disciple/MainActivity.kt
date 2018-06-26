@@ -6,6 +6,7 @@ import android.util.Log
 import android.widget.Button
 import com.monster.disciple.response.BaseResponse
 import com.monster.disciple.subscribe.ToastObserver
+import com.monster.disciple.util.CacheBuilder
 import retrofit2.Response
 
 class MainActivity : AppCompatActivity() {

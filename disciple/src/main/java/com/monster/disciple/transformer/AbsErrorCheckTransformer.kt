@@ -2,7 +2,7 @@ package com.monster.disciple.transformer
 
 import android.content.Context
 import android.text.TextUtils
-import com.monster.disciple.CacheBuilder
+import com.monster.disciple.util.CacheBuilder
 import com.monster.disciple.response.BaseResponse
 import com.monster.disciple.util.getCacheFunction
 import com.monster.disciple.util.newInstanceFunction

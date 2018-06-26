@@ -1,4 +1,4 @@
-package com.monster.disciple
+package com.monster.disciple.util
 
 import java.lang.reflect.ParameterizedType
 import java.lang.reflect.Type

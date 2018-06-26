@@ -4,6 +4,7 @@ import android.content.Context
 import com.facebook.stetho.okhttp3.StethoInterceptor
 import com.monster.disciple.interceptor.HttpCacheInterceptor
 import com.monster.disciple.interceptor.MultiHostInterceptor
+import com.monster.disciple.util.newRetrofitInstance
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -25,6 +26,8 @@ class Disciple private constructor() {
         private var instance: Disciple? = null
         @Volatile
         private var clientInstance: OkHttpClient? = null
+        @Volatile
+        private var auxiliaryRetrofit: MutableMap<String, Retrofit>? = null
 
         fun init(context: Context, builder: Builder) {
             instance = Disciple()
@@ -45,6 +48,14 @@ class Disciple private constructor() {
             instance!!.setBaseUrl(builder.baseUrl)
         }
 
+        fun initAuxiliaryRetrofit(context: Context, builder: Builder, retrofitInstanceKey: String) {
+            val retrofit = newRetrofitInstance(context, builder)
+            if (null == auxiliaryRetrofit) {
+                auxiliaryRetrofit = HashMap()
+            }
+            auxiliaryRetrofit?.put(retrofitInstanceKey, retrofit)
+        }
+
         fun getInstance(): Disciple {
             if (null == instance) {
                 throw RuntimeException("must be init first!")
@@ -55,6 +66,16 @@ class Disciple private constructor() {
         fun <T> create(serviceClazz: Class<T>): T {
             if (null == retrofit) {
                 throw RuntimeException("must be init first!")
+            }
+            return retrofit!!.create(serviceClazz)
+        }
+
+        fun <T> create(retrofitInstanceKey: String, serviceClazz: Class<T>): T {
+
+            retrofit = auxiliaryRetrofit?.get(retrofitInstanceKey)
+
+            if (null == retrofit) {
+                throw RuntimeException("auxiliary retrofit must be init first!")
             }
             return retrofit!!.create(serviceClazz)
         }
