@@ -6,6 +6,7 @@ import android.util.Log
 import android.widget.Button
 import com.monster.disciple.response.BaseResponse
 import com.monster.disciple.subscribe.ToastObserver
+import com.monster.disciple.transformer.DiscipleErrorCheckTransformer
 import com.monster.disciple.util.CacheBuilder
 import retrofit2.Response
 
@@ -18,7 +19,7 @@ class MainActivity : AppCompatActivity() {
         findViewById<Button>(R.id.button).setOnClickListener({ v ->
             Disciple.create(ApiService::class.java)
                     .getText()
-                    .compose(DefaultTransformer<Response<BaseResponse<TestData>>, BaseResponse<TestData>>(this,
+                    .compose(DiscipleErrorCheckTransformer<Response<BaseResponse<TestData>>, BaseResponse<TestData>>(this,
                             CacheBuilder.newBuilder()
                                     .withCacheKey("mainid")
                                     .addType(BaseResponse::class.java, TestData::class.java)
