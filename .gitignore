@@ -13,3 +13,7 @@
 .externalNativeBuild
 disciple/bintrayUpload.gradle
 disciple/project.properties
+.idea/gradle.xml
+disciple/deploy.gradle
+gradle/wrapper/gradle-wrapper.properties
+gradle.properties
